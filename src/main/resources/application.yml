@@ -1,0 +1,13 @@
+spring:
+  application:
+    name: spring-jpa-course
+  datasource:
+    url: jdbc:postgresql://localhost:5432/data_jpa
+    username: postgres
+    password: example
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    database: postgresql
+    show-sql: true
