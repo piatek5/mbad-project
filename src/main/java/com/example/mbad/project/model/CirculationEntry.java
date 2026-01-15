@@ -1,10 +1,13 @@
 package com.example.mbad.project.model;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -22,7 +25,7 @@ public class CirculationEntry {
     @JoinColumn(name = "user_id")
     private User user;
 
-    private Instant creationDate;
+    private LocalDate creationDate;
 
-    private Instant endDate;
+    private LocalDate endDate;
 }

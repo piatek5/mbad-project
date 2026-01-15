@@ -14,8 +14,9 @@ public interface BookRepository extends JpaRepository<Book, Long> {
             "(LOWER(b.title) LIKE LOWER(CONCAT('%', :title, '%')) OR :title IS NULL) AND " +
             "(EXISTS (SELECT a FROM b.authors a WHERE LOWER(a.lastName) LIKE LOWER(CONCAT('%', :author, '%'))) OR :author IS NULL) AND " +
             "(b.publicationYear >= :minYear OR :minYear IS NULL) AND " +
-            "(b.publicationYear <= :maxYear OR :maxYear IS NULL)")
-    List<Book> findWithFilters(String title, String author, Integer minYear, Integer maxYear);
+            "(b.publicationYear <= :maxYear OR :maxYear IS NULL) AND " +
+            "(b.isbn = :isbn OR :isbn IS NULL)")
+    List<Book> findWithFilters(String title, String author, Integer minYear, Integer maxYear, String isbn);
 }
 
 

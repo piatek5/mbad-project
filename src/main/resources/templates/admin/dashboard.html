@@ -1,0 +1,65 @@
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .admin-container-page})}">
+
+<div class="admin-container-page container">
+
+    <header style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+        <h1>Centrum Dowodzenia</h1>
+        <p style="color: var(--color-text-muted);">Witaj w panelu administratora. Tutaj masz władzę absolutną.</p>
+    </header>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.5rem; margin-bottom: 3rem;">
+
+        <div class="retro-box" style="padding: 1.5rem; text-align: center;">
+            <div style="font-size: 3rem; font-weight: 700; color: var(--color-primary);"
+                 th:text="${usersCount}">0</div>
+            <div style="font-weight: 600; text-transform: uppercase; font-size: 0.85rem;">Użytkowników</div>
+        </div>
+
+        <div class="retro-box" style="padding: 1.5rem; text-align: center;">
+            <div style="font-size: 3rem; font-weight: 700; color: #d63384;"
+                 th:text="${activeRentalsCount}">0</div> <div style="font-weight: 600; text-transform: uppercase; font-size: 0.85rem;">Wypożyczonych książek</div>
+        </div>
+
+        <div class="retro-box" style="padding: 1.5rem; text-align: center; opacity: 0.6;">
+            <div style="font-size: 3rem; font-weight: 700;">0</div>
+            <div style="font-weight: 600; text-transform: uppercase; font-size: 0.85rem;">Zgłoszeń (Wkrótce)</div>
+        </div>
+    </div>
+
+    <h3 style="margin-bottom: 1.5rem;">Zarządzanie Systemem</h3>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 2rem;">
+
+        <a th:href="@{/admin/users}" class="retro-box retro-interactive" style="text-decoration: none; color: inherit; display: block; padding: 0;">
+            <div style="background-color: #eee; padding: 1rem; border-bottom: var(--border-standard); font-weight: 700;">
+                UŻYTKOWNICY
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">Przeglądaj listę zarejestrowanych, blokuj dostęp lub nadawaj uprawnienia administratora.</p>
+                <span class="btn btn-primary" style="display: inline-block; width: auto; font-size: 0.8rem;">Zarządzaj</span>
+            </div>
+        </a>
+
+        <a th:href="@{/admin/books}" class="retro-box retro-interactive" style="text-decoration: none; color: inherit; display: block; padding: 0;">
+            <div style="background-color: #eee; padding: 1rem; border-bottom: var(--border-standard); font-weight: 700;">
+                KATALOG KSIĄŻEK
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">Dodawaj nowe tytuły, edytuj opisy i zarządzaj fizycznymi egzemplarzami.</p>
+                <span class="btn btn-primary" style="display: inline-block; width: auto; font-size: 0.8rem;">Edytuj Katalog</span>
+            </div>
+        </a>
+
+        <a th:href="@{/admin/rentals}" class="retro-box retro-interactive" style="text-decoration: none; color: inherit; display: block; padding: 0;">
+            <div style="background-color: #eee; padding: 1rem; border-bottom: var(--border-standard); font-weight: 700;">
+                WYPOŻYCZENIA
+            </div>
+            <div style="padding: 1.5rem;">
+                <p style="font-size: 0.9rem; margin-bottom: 1rem;">Pełna historia wypożyczeń. Wymuszaj zwroty i sprawdzaj przetrzymania.</p>
+                <span class="btn btn-primary" style="display: inline-block; width: auto; font-size: 0.8rem;">Sprawdź</span>
+            </div>
+        </a>
+
+    </div>
+</div>
+</th:block>

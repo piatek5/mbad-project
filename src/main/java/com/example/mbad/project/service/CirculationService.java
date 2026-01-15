@@ -14,4 +14,8 @@ public class CirculationService {
     private final ReservationRepository reservationRepository;
     private final QueueEntryRepository queueEntryRepository;
 
+
+    public long activeRentalsCount() {
+        return rentalRepository.countByEndDateIsNull();
+    }
 }

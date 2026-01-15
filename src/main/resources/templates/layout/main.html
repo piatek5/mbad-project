@@ -17,18 +17,35 @@
     </div>
 
     <ul class="nav-links">
-        <li><a th:href="@{/}">Start</a></li>
+
+        <li>
+            <a th:href="@{/}">Start</a>
+        </li>
+
         <li>
             <a th:href="@{/books}">Katalog</a>
         </li>
+
         <li sec:authorize="isAnonymous()">
             <a th:href="@{/login}">Zaloguj się</a>
         </li>
+
         <li sec:authorize="isAuthenticated()">
             <form th:action="@{/logout}" method="post" style="display: inline;">
                 <button type="submit" class="nav-btn-logout">Wyloguj</button>
             </form>
         </li>
+
+        <li sec:authorize="isAuthenticated()">
+            <a th:href="@{/my-profile}">Moje konto</a>
+        </li>
+
+        <li sec:authorize="hasAuthority('ADMIN')">
+            <a th:href="@{/admin/dashboard}" style="background-color: darkred; color: white;">
+                PANEL ADMINA
+            </a>
+        </li>
+
     </ul>
 </nav>
 

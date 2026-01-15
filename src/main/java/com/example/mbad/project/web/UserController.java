@@ -1,5 +1,6 @@
 package com.example.mbad.project.web;
 
+import com.example.mbad.project.model.User;
 import com.example.mbad.project.service.UserService;
 import com.example.mbad.project.web.forms.LoginForm;
 import com.example.mbad.project.web.forms.RegisterForm;
@@ -9,6 +10,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import java.security.Principal;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,5 +41,19 @@ public class UserController {
         userService.registerUser(registerForm);
 
         return "redirect:/login";
+    }
+
+    @GetMapping("/my-profile")
+    public String myProfile(Model model, Principal principal,
+                            @RequestParam(required = false, defaultValue = "rentals") String tab) {
+
+        String username = principal.getName();
+
+        User user = userService.findByUsername(username);
+
+        model.addAttribute("user", user);
+        model.addAttribute("activeTab", tab); // Przekazujemy do widoku, która zakładka jest aktywna
+
+        return "user/profile";
     }
 }

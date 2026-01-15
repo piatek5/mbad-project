@@ -7,13 +7,17 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterForm {
+public class UserSearchForm {
 
     private String username;
-
-    private String password;
 
     private String email;
 
     private String phone;
+
+    public boolean hasFilters() {
+        return (username != null && !username.isBlank()) ||
+                (email != null && !email.isBlank()) ||
+                (phone != null && !phone.isBlank());
+    }
 }

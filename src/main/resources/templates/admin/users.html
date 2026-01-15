@@ -1,0 +1,106 @@
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .login-page-content})}">
+<div class="login-page-content container">
+
+    <header style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+        <h1>Baza Użytkowników</h1>
+        <p style="color: var(--color-text-muted);">Wyszukuj, edytuj i przeglądaj historię czytelników.</p>
+    </header>
+
+    <div class="books-and-filters"> <aside class="retro-box" style="width: 280px; flex-shrink: 0;">
+        <div class="form-header">
+            Szukaj czytelnika
+        </div>
+
+        <div class="form-content">
+            <form th:action="@{/admin/users}" method="get" th:object="${searchForm}">
+
+                <div class="form-label-field">
+                    <label for="username" class="form-label">Nazwa użytkownika</label>
+                    <input type="text" id="username" class="form-field" placeholder="cooltony1989" th:field="*{username}">
+                </div>
+
+                <div class="form-label-field">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input type="text" id="email" class="form-field" placeholder="przyklad@atrapa.mock" th:field="*{email}">
+                </div>
+
+                <div class="form-label-field">
+                    <label for="phone" class="form-label">Telefon</label>
+                    <input type="text" id="phone" class="form-field" placeholder="(123) 456 7890" th:field="*{phone}">
+                </div>
+
+                <button type="submit" class="btn btn-primary retro-interactive-strong" style="margin-top: 1rem;">Szukaj</button>
+
+                <div style="text-align: center; margin-top: 10px;">
+                    <a th:href="@{/admin/users}" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Wyczyść filtry</a>
+                </div>
+            </form>
+        </div>
+    </aside>
+
+        <div class="book-list">
+            <div th:if="${!isSearchMode}" class="retro-box" style="text-align: center; padding: 4rem 2rem; background-color: #fff; color: #777;">
+                <h2 style="margin-bottom: 10px;">Znajdź użytkownika</h2>
+                <p>Wpisz login, e-mail lub telefon po lewej stronie, aby rozpocząć zarządzanie.</p>
+            </div>
+
+            <div th:if="${isSearchMode && users.isEmpty()}" class="retro-box"
+                 style="text-align: center; padding: 2rem; background-color: #ffe6e6; color: #c0392b;">
+                <h3>Brak użytkowników</h3>
+                <p>Nie znaleziono nikogo pasującego do podanych kryteriów.</p>
+            </div>
+
+            <th:block th:if="${!users.isEmpty()}">
+
+                <div class="retro-box retro-interactive" th:each="user : ${users}" style="display: flex; flex-direction: column;">
+
+                    <div class="card-top-accent", style="background: linear-gradient(90deg, var(--color-primary), midnightblue);">
+
+                    </div>
+
+                    <div class="card-body" style="padding: 1rem;">
+
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                            <div style="font-size: 1.2rem; font-weight: 700; color: #222;">
+                                <span th:text="${user.username}">cooltony1989</span>
+                            </div>
+                            <span class="badge" th:text="${user.role}"
+                                  th:style="${user.role.name() == 'ADMIN'} ? 'background: #ffdce0; color: darkred;' : ''">USER</span>
+                        </div>
+
+                        <div style="font-size: 0.9rem; color: #444; margin-bottom: 1rem; display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                            <div style="grid-column: span 2; font-size: 0.8rem; color: #888;">
+                                ID: <span th:text="${user.id}">111111</span>
+                            </div>
+
+                            <div>E-mail: <span th:text="${user.email}" style="text-decoration: underline">email@test.pl</span></div>
+                            <div>Tel.: <span th:text="${user.phone} ?: 'Brak numeru'">123-456-789</span></div>
+                        </div>
+
+                        <hr style="border: 0; border-top: 1px solid #eee; margin-bottom: 1rem;">
+
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;">
+
+                            <a href="#" class="btn" style="background: #333; color: white; font-size: 0.75rem; padding: 6px; display: flex; justify-content: center; align-items: center;">
+                                Panel edycji
+                            </a>
+
+                            <a href="#" class="btn" style="background: #e9ecef; font-size: 0.75rem; padding: 6px; display: flex; justify-content: center; align-items: center;">
+                                Wypożyczenia
+                            </a>
+
+                            <a href="#" class="btn" style="background: #e9ecef; font-size: 0.75rem; padding: 6px; display: flex; justify-content: center; align-items: center;">
+                                Rezerwacje
+                            </a>
+
+                            <a href="#" class="btn" style="background: #e9ecef; font-size: 0.75rem; padding: 6px; display: flex; justify-content: center; align-items: center;">
+                                Kolejka...
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+</div>
+</th:block>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: layout('Zarządzanie Księgozbiorem', ~{:: .admin-books-content})}">
+
+<body>
+<div class="admin-books-content container">
+
+    <header style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+        <div>
+            <h1 style="margin: 0;">Zarządzanie Księgozbiorem</h1>
+            <p style="color: var(--color-text-muted); margin: 0;">Edytuj katalog i dodawaj nowe pozycje.</p>
+        </div>
+
+        <button onclick="openModal()" class="btn btn-primary retro-interactive-strong" style="width: auto; padding: 0.8rem 1.5rem;">
+            ➕ Dodaj nową książkę
+        </button>
+    </header>
+
+    <div class="books-and-filters">
+
+        <aside class="retro-box" style="width: 280px; flex-shrink: 0;">
+            <div class="form-header">🔍 Znajdź w bazie</div>
+            <div class="form-content">
+                <form th:action="@{/admin/books}" method="get" th:object="${searchForm}">
+                    <div class="form-label-field">
+                        <label class="form-label">Tytuł</label>
+                        <input type="text" class="form-field" th:field="*{title}">
+                    </div>
+                    <div class="form-label-field">
+                        <label class="form-label">ISBN</label>
+                        <input type="text" class="form-field" th:field="*{isbn}">
+                    </div>
+                    <button type="submit" class="btn btn-primary retro-interactive-strong" style="margin-top: 1rem;">Szukaj</button>
+                    <div style="text-align: center; margin-top: 10px;">
+                        <a th:href="@{/admin/books}" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Wyczyść</a>
+                    </div>
+                </form>
+            </div>
+        </aside>
+
+        <div class="book-list">
+
+            <div th:if="${books.isEmpty()}" class="retro-box" style="padding: 2rem; text-align: center; color: #777;">
+                <h3>Brak książek</h3>
+                <p>Użyj przycisku u góry, aby dodać pierwszą pozycję, lub zmień kryteria wyszukiwania.</p>
+            </div>
+
+            <th:block th:if="${!books.isEmpty()}">
+                <div class="book-card retro-box retro-interactive" th:each="book : ${books}">
+                    <div class="card-top-accent"></div>
+                    <div class="card-body">
+
+                        <div style="display: flex; justify-content: space-between;">
+                            <div class="book-title" th:text="${book.title}">Tytuł</div>
+                            <span style="font-size: 0.8rem; color: #aaa;" th:text="'ID: ' + ${book.id}">ID: 1</span>
+                        </div>
+
+                        <div class="book-authors">
+                                <span th:each="author : ${book.authors}"
+                                      th:text="${author.firstName + ' ' + author.lastName} + ', '">Autor</span>
+                        </div>
+
+                        <div class="book-meta">
+                            ISBN: <strong th:text="${book.isbn}">1234</strong> |
+                            Rok: <strong th:text="${book.publicationYear}">2000</strong>
+                        </div>
+
+                        <div style="margin-top: 1rem; display: flex; gap: 10px; border-top: 1px solid #eee; padding-top: 1rem;">
+                            <a href="#" class="btn" style="background: #333; color: white; font-size: 0.8rem;">✏️ Edytuj</a>
+                            <a href="#" class="btn" style="background: #ffe6e6; color: darkred; font-size: 0.8rem; border-color: darkred;">🗑️ Usuń</a>
+                            <a href="#" class="btn" style="background: #e9ecef; font-size: 0.8rem;">📦 Egzemplarze</a>
+                        </div>
+
+                    </div>
+                </div>
+            </th:block>
+        </div>
+    </div>
+
+    <div id="addBookModal" class="modal-overlay">
+        <div class="modal-window">
+            <div style="background: var(--color-primary); color: white; padding: 1rem; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid black;">
+                <h3 style="margin: 0;">Nowa Pozycja</h3>
+                <button onclick="closeModal()" style="background: none; border: none; color: white; font-size: 1.5rem; cursor: pointer;">&times;</button>
+            </div>
+
+            <div style="padding: 2rem;">
+                <form th:action="@{/admin/books/add}" th:object="${bookForm}" method="post">
+
+                    <div class="form-label-field">
+                        <label class="form-label">Tytuł książki *</label>
+                        <input type="text" th:field="*{title}" class="form-field" required>
+                    </div>
+
+                    <div style="display: flex; gap: 15px;">
+                        <div class="form-label-field" style="flex: 1;">
+                            <label class="form-label">ISBN *</label>
+                            <input type="text" th:field="*{isbn}" class="form-field" required>
+                        </div>
+                        <div class="form-label-field" style="flex: 1;">
+                            <label class="form-label">Rok wydania *</label>
+                            <input type="number" th:field="*{publicationYear}" class="form-field" required>
+                        </div>
+                    </div>
+
+                    <div class="form-label-field">
+                        <label class="form-label">Wydawnictwo *</label>
+                        <select th:field="*{publisherId}" class="form-field" required>
+                            <option value="" disabled selected>-- Wybierz --</option>
+                            <option th:each="pub : ${allPublishers}" th:value="${pub.id}" th:text="${pub.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-label-field">
+                        <label class="form-label">Autorzy (Ctrl+Click) *</label>
+                        <select th:field="*{authorIds}" class="form-field" multiple required style="height: 100px;">
+                            <option th:each="auth : ${allAuthors}" th:value="${auth.id}" th:text="${auth.firstName + ' ' + auth.lastName}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-label-field">
+                        <label class="form-label">Kategorie (Ctrl+Click) *</label>
+                        <select th:field="*{categoryIds}" class="form-field" multiple required style="height: 100px;">
+                            <option th:each="cat : ${allCategories}" th:value="${cat.id}" th:text="${cat.name}"></option>
+                        </select>
+                    </div>
+
+                    <div class="form-label-field">
+                        <label class="form-label">Opis</label>
+                        <textarea th:field="*{description}" class="form-field" rows="3"></textarea>
+                    </div>
+
+                    <div style="display: flex; gap: 10px; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary retro-interactive">Zapisz</button>
+                        <button type="button" onclick="closeModal()" class="btn retro-interactive" style="background: #ccc;">Anuluj</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-window { background: white; width: 600px; max-height: 90vh; overflow-y: auto; border: 2px solid black; box-shadow: 8px 8px 0px black; animation: popIn 0.3s; }
+        @keyframes popIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    </style>
+
+    <script>
+        function openModal() { document.getElementById('addBookModal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('addBookModal').style.display = 'none'; }
+        window.onclick = function(e) { if(e.target == document.getElementById('addBookModal')) closeModal(); }
+    </script>
+
+</div>
+</body>
+</html>

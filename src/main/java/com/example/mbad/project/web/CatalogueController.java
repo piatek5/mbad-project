@@ -22,6 +22,7 @@ public class CatalogueController {
 
     @InitBinder
     public void initBinder(WebDataBinder binder) {
+
         binder.registerCustomEditor(
                 String.class,
                 new StringTrimmerEditor(true) // true => "" -> null
@@ -30,17 +31,17 @@ public class CatalogueController {
 
     @GetMapping("/books")
     public String listBooks(
-            @ModelAttribute("searchForm") BookSearchForm searchForm,
-            Model model) {
+            @ModelAttribute("searchForm") BookSearchForm searchForm, Model model) {
 
         // Jeśli formularz został jakkolwiek wypełniony
         if (searchForm.hasFilters()) {
             // Cała lista książek po przefiltrowaniu
             List<Book> foundBooks = catalogueService.searchBooks(searchForm);
-            System.out.println("Autor: " + searchForm.getAuthor());
+
             model.addAttribute("books", foundBooks);
             model.addAttribute("isSearchMode", true);
         } else {
+
             model.addAttribute("books", List.of());
             model.addAttribute("isSearchMode", false);
         }
@@ -49,7 +50,7 @@ public class CatalogueController {
     }
 
     @GetMapping("/")
-    public String welcome(Model model) {
+    public String welcome() {
         return "index";
     }
 }

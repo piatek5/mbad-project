@@ -15,7 +15,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .authorizeHttpRequests(auth -> auth
+                        .authorizeHttpRequests(auth -> auth
+                        .requestMatchers("/admin/**").hasAuthority("ADMIN") // Tylko dla admina
                         .requestMatchers("/css/**", "/images/**", "/", "/login", "/register", "/books").permitAll() // Co jest dostępne bez logowania
                         .anyRequest().authenticated() // Reszta wymaga logowania
                 )

@@ -3,10 +3,14 @@ package com.example.mbad.project.model;
 import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
-import java.time.Instant;
+import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -20,5 +24,6 @@ public class Reservation extends CirculationEntry
     @JoinColumn(name = "book_id")
     private BookCopy bookCopy;
 
-    private Instant expirationDate;
+    @NotNull
+    private LocalDate dueDate;
 }

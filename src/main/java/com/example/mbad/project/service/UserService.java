@@ -3,12 +3,15 @@ package com.example.mbad.project.service;
 import com.example.mbad.project.model.User;
 import com.example.mbad.project.repository.UserRepository;
 import com.example.mbad.project.web.forms.RegisterForm;
+import com.example.mbad.project.web.forms.UserSearchForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.password.PasswordEncoder; // IMPORT
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +28,7 @@ public class UserService implements UserDetailsService {
         return org.springframework.security.core.userdetails.User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .roles("USER")
+                .authorities(user.getRole().name())
                 .build();
     }
 
@@ -40,4 +43,18 @@ public class UserService implements UserDetailsService {
 
         userRepository.save(user);
     }
+
+    public User findByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    public int countAll() {
+        return userRepository.findAll().size();
+    }
+
+    public List<User> searchUsers(UserSearchForm form) {
+        return userRepository.searchUsers(form.getUsername(), form.getEmail(), form.getPhone());
+    }
+
 }

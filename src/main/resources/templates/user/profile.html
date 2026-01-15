@@ -1,0 +1,108 @@
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .profile-page-content})}">
+
+    <div class="profile-page-content container">
+
+        <header style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+            <h1>Twoje konto</h1>
+            <p style="font-style: italic; color: var(--color-text-muted);">Zgadza się, Twoje konto.</p>
+        </header>
+
+        <div class="profile-info-list-details">
+
+            <aside class="retro-box" style="width: 280px; flex-shrink: 0;">
+
+                <div class="side-list-header">
+                    Panel Wyszukiwania
+                </div>
+
+                <ul class="side-list-content">
+
+                    <li>
+                        <a th:href="@{/my-profile(tab='rentals')}"
+                           class="side-list-link"
+                           th:classappend="${activeTab == 'rentals'} ? 'active'">
+                            📚 Wypożyczenia
+                        </a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{/my-profile(tab='reservations')}"
+                           class="side-list-link"
+                           th:classappend="${activeTab == 'reservations'} ? 'active'">
+                            📚 Rezerwacje
+                        </a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{/my-profile(tab='queue')}"
+                           class="side-list-link"
+                           th:classappend="${activeTab == 'queue'} ? 'active'">
+                            📚 Lista oczekiwań
+                        </a>
+                    </li>
+
+                    <li>
+                        <a th:href="@{/my-profile(tab='settings')}"
+                           class="side-list-link"
+                           th:classappend="${activeTab == 'settings'} ? 'active'">
+                            ⚙️ Ustawienia
+                        </a>
+                    </li>
+
+                </ul>
+
+            </aside>
+
+            <div class="retro-box" style="flex-grow: 1; padding: 2rem;">
+
+                <div th:if="${activeTab == 'rentals'}">
+                     <h3  style="margin-bottom: 1rem">Twoje aktualne wypożyczenia</h3>
+
+                    <div th:if="${user.activeRentals.isEmpty()}" style="margin-top: 1rem; color: #666;">
+                        Brak aktualnych wypożyczeń.
+                    </div>
+
+                    <ul th:if="${!user.activeRentals.isEmpty()}">
+                        <li th:each="rental : ${user.activeRentals}";>
+                            <strong th:text="${rental.bookCopy.book.title}">Tytuł</strong>
+                            (Do zwrotu: <span th:text="${#temporals.format(rental.dueDate, 'dd.MM.yyyy')}">30.02.2024</span>)
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${activeTab == 'reservations'}">
+                     <h3  style="margin-bottom: 1rem">Twoje rezerwacje</h3>
+
+                    <div th:if="${#lists.isEmpty(activeReservations)}" style="margin-top: 1rem; color: #666;">
+                        Brak aktywnych rezerwacji.
+                    </div>
+
+                    <ul th:if="${!#lists.isEmpty(activeReservations)}">
+                        <li th:each="reservation : ${activeReservations}">
+                            <strong th:text="${reservation.bookCopy.book.title}">Tytuł</strong>
+                            (Ważne do: <span th:text="${#temporals.format(reservation.expirationDate, 'dd.MM.yyyy')}">30.02.2024</span>)
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${activeTab == 'queue'}">
+                    <h3  style="margin-bottom: 1rem">Książki w oczekiwaniu</h3>
+                    <div th:if="${user.queueEntries.isEmpty()}" style="margin-top: 1rem; color: #666;">
+                        Nie oczekujesz na żadne książki.
+                    </div>
+                    <ul th:if="${!user.queueEntries.isEmpty()}">
+                        <li th:each="queueEntry : ${user.queueEntries}">
+                            <strong th:text="${queueEntry.book.title}">Tytuł</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <div th:if="${activeTab == 'settings'}">
+                    <h3  style="margin-bottom: 1rem">Ustawienia konta</h3>
+                    <p>Tu będzie formularz zmiany hasła itp.</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</th:block>

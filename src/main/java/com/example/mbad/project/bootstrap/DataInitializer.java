@@ -8,15 +8,17 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.Instant;
+import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
+
+    private final int RENEVAL_PERIOD = 30;
+    private final int RESERVATION_PERIOD = 30;
 
     private final PublisherRepository publisherRepository;
     private final AuthorRepository authorRepository;
@@ -118,8 +120,21 @@ public class DataInitializer implements CommandLineRunner {
                     .email(faker.internet().emailAddress(username))
                     .phone(phone)
                     .password(passwordEncoder.encode(phone))
+                    .role(Role.USER)
                     .build());
         }
+
+        if (userRepository.findByUsername("admin").isEmpty()) {
+            User admin = new User();
+            admin.setUsername("admin");
+            admin.setPassword(passwordEncoder.encode("admin123")); // Hasło: admin123
+            admin.setEmail("admin@biblioteka.pl");
+            admin.setRole(Role.ADMIN); // <--- TU JEST KLUCZ
+
+            users.add(admin);
+            System.out.println("--- STWORZONO KONTO ADMINA (Login: admin / Pass: admin123) ---");
+        }
+
         return userRepository.saveAll(users);
     }
 
@@ -164,15 +179,27 @@ public class DataInitializer implements CommandLineRunner {
     private void initRentals(int count, List<BookCopy> copies, List<User> users) {
         List<Rental> rentals = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            Instant creationDate = faker.date().past(30, TimeUnit.DAYS).toInstant();
+            int daysAgo = faker.number().numberBetween(1, 100);
+            LocalDate creationDate = LocalDate.now().minusDays(daysAgo);
+            LocalDate endDate = faker.bool().bool() ? creationDate.plusDays(faker.number().numberBetween(1, daysAgo + 1)) : null;
+            long daysHeld;
+            if (endDate != null) {
+                daysHeld = ChronoUnit.DAYS.between(creationDate, endDate);
+            }
+            else {
+                daysHeld = ChronoUnit.DAYS.between(creationDate, LocalDate.now());
+            }
+
+            int renewalCount = (int) (daysHeld / RENEVAL_PERIOD);
+            LocalDate dueDate = creationDate.plusDays(RENEVAL_PERIOD).plusDays((long) RENEVAL_PERIOD * renewalCount);
 
             rentals.add(Rental.builder() // Używamy SuperBuildera
                     .user(getRandomItem(users))
                     .bookCopy(getRandomItem(copies))
                     .creationDate(creationDate)
-                    // EndDate może być null (wciąż wypożyczone) lub ustawione (zwrócone)
-                    .endDate(faker.bool().bool() ? creationDate.plus(7, ChronoUnit.DAYS) : null)
-                    .renewalCount(faker.number().numberBetween(0, 2))
+                    .endDate(endDate)
+                    .renewalCount(renewalCount)
+                    .dueDate(dueDate)
                     .build());
         }
         rentalRepository.saveAll(rentals);
@@ -182,13 +209,13 @@ public class DataInitializer implements CommandLineRunner {
     private void initReservations(int count, List<BookCopy> copies, List<User> users) {
         List<Reservation> reservations = new ArrayList<>();
         for (int i = 0; i < count; i++) {
-            Instant creationDate = faker.date().future(5, TimeUnit.DAYS).toInstant();
+            LocalDate creationDate = LocalDate.now().minusDays(faker.number().numberBetween(-1, 2));
 
             reservations.add(Reservation.builder()
                     .user(getRandomItem(users))
                     .bookCopy(getRandomItem(copies))
                     .creationDate(creationDate)
-                    .expirationDate(creationDate.plus(3, ChronoUnit.DAYS))
+                    .dueDate(creationDate.plusDays(faker.number().numberBetween(1, 4)))
                     .endDate(null) // Rezerwacja aktywna
                     .build());
         }
@@ -203,7 +230,7 @@ public class DataInitializer implements CommandLineRunner {
             queueEntries.add(QueueEntry.builder()
                     .user(getRandomItem(users))
                     .book(getRandomItem(books)) // Tu referencja do Book
-                    .creationDate(Instant.now())
+                    .creationDate(LocalDate.now())
                     .build());
         }
         queueEntryRepository.saveAll(queueEntries);
