@@ -1,0 +1,334 @@
+/* IMPORT CZCIONEK */
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Space+Grotesk:wght@300..700&display=swap');
+
+/* 1. ZMIENNE GLOBALNE - CENTRALA STEROWANIA */
+:root {
+    /* Kolory */
+    --color-primary: peru;
+    --color-bg-body: #f4f4f6;
+    --color-bg-card: #ffffff;
+    --color-bg-input: #f9f9f9;
+    --color-text-main: #2b2b2b;
+    --color-text-muted: #555;
+    --color-border: #000000;
+
+    /* Typografia */
+    --font-serif: 'Lora', serif;
+    --font-sans: 'Space Grotesk', sans-serif;
+
+    /* Elementy UI (Retro Vibe) */
+    --border-standard: 1px solid var(--color-border);
+    --shadow-hard: 2px 2px 0px var(--color-border);     /* Cień spoczynkowy */
+    --shadow-hover: 4px 4px 0px var(--color-border);    /* Cień po najechaniu */
+    --transition-fast: transform 0.2s, box-shadow 0.2s;
+}
+
+/* RESET I BAZA */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    font-family: var(--font-serif);
+    background-color: var(--color-bg-body);
+    color: var(--color-text-main);
+    line-height: 1.6;
+}
+
+/* UNIFIKACJA NAGŁÓWKÓW I ELEMENTÓW TECHNICZNYCH */
+h1, h2, h3, h4, h5, h6, .btn, label, footer, .badge, nav {
+    font-family: var(--font-sans);
+    letter-spacing: -0.02em;
+}
+
+.btn {
+
+}
+
+a { text-decoration: none; color: inherit; }
+
+/* --- 2. KLASY NARZĘDZIOWE (REUSABLE COMPONENTS) --- */
+
+/* Główny styl "Retro Box" - używany w guzikach, kartach i filtrach */
+.retro-box {
+    background-color: var(--color-bg-card);
+    border: var(--border-standard);
+    transition: var(--transition-fast);
+}
+
+/* Interaktywny element retro (guzik, karta) */
+.retro-interactive:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: var(--shadow-hard);
+}
+/* Wersja z mocniejszym cieniem (np. guziki główne) */
+.retro-interactive-strong {
+    box-shadow: var(--shadow-hard);
+}
+.retro-interactive-strong:hover {
+    box-shadow: var(--shadow-hover);
+}
+
+.form-header {
+    background-color: var(--color-primary);
+    color: #fff;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    border-bottom: var(--border-standard);
+    font-family: var(--font-sans);
+}
+
+/* FORMULARZ RETRO */
+.form-content { padding: 1.5rem; }
+
+.form-label-field { margin-bottom: 1.2rem; }
+
+.form-label {
+    display: block;
+    margin-bottom: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+
+.form-field{
+    width: 100%;
+    padding: 0.6rem;
+    border: var(--border-standard);
+    background-color: var(--color-bg-input);
+    font-family: var(--font-serif);
+    font-size: 0.95rem;
+}
+
+.form-field:focus {
+    outline: none;
+    background-color: #fff;
+    border-left: 4px solid var(--color-primary);
+}
+
+/* --- 3. KOMPONENTY STRONY --- */
+
+/* --- NAWIGACJA (NAVBAR) --- */
+
+.navbar {
+    background-image: url('../images/book-background.jpg');
+    background-color: var(--color-primary);
+    background-repeat: repeat;
+    background-size: 300px auto;
+    color: white;
+    padding: 1rem 2rem;
+
+    /* To układa Logo po lewej, a Linki po prawej */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border-bottom: var(--border-standard);
+}
+
+.logo a {
+    color: white;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+/* KONTENER LISTY - To naprawia Twój problem! */
+.nav-links {
+    display: flex;          /* Układa elementy obok siebie (w poziomie) */
+    list-style: none;       /* Usuwa kropki/punktatory */
+    gap: 15px;              /* Odstępy między przyciskami */
+    align-items: center;    /* Wyrównuje elementy w pionie */
+    margin: 0;              /* Reset marginesów listy */
+    padding: 0;             /* Reset paddingu listy */
+}
+
+/* WYGLĄD LINKÓW I PRZYCISKU (Zunifikowane) */
+.nav-links a,
+.nav-btn-logout {
+    /* Styl pudełka (Retro Box) */
+    background-color: var(--color-bg-body);
+    color: #2c3e50;
+    border: var(--border-standard);
+    box-shadow: var(--shadow-hard);
+    transition: var(--transition-fast);
+
+    /* Wymiary i typografia */
+    padding: 0.5rem 1rem;
+    font-weight: 600;
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    text-decoration: none;
+    line-height: 1.2;       /* Sztywna interlinia, żeby button i a były równe */
+
+    /* Układ wewnątrz przycisku */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* EFEKT NAJECHANIA MYSZKĄ (HOVER) */
+.nav-links a:hover,
+.nav-btn-logout:hover {
+    transform: translate(-1px, -1px);
+    background-color: #fff;
+    box-shadow: 3px 3px 0px var(--color-border);
+}
+
+/* SPECYFICZNE DLA BUTTONA (Reset systemowy) */
+.nav-btn-logout {
+    cursor: pointer;
+    margin: 0; /* Buttony czasem mają dziwne marginesy domyślne */
+}
+
+/* STOPKA */
+.site-footer {
+    background-color: #e8e8e8;
+    border-top: 1px solid #dcdcdc; /* Tu celowo inny border niż czarny */
+    padding: 2rem 0;
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+.login-window {
+    border: var(--border-standard);
+    width: 600px;
+}
+
+.login-header {
+    background-color: var(--color-primary);
+    border-bottom: var(--border-standard);
+    color: #fff;
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+}
+
+/* LAYOUT */
+.main-content {
+    flex: 1;
+    padding: 3rem 0;
+}
+
+.container {
+    max-width: 1400px; /* Lepiej dać max-width w px/rem niż % dla dużych ekranów */
+    width: 95%;
+    margin: 0 auto;
+}
+
+/* Przyciski (Generalizacja) */
+.btn {
+    display: inline-block;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    font-weight: 700;
+    text-transform: uppercase;
+    padding: 0.7rem;
+    /* Dziedziczy ramki i cienie z klas utility */
+}
+
+.btn-primary {
+    background-color: var(--color-primary);
+    color: white;
+}
+
+/* GRID KSIĄŻEK */
+.books-and-filters {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start; /* Ważne dla sidebarów */
+}
+
+.book-list {
+    flex-grow: 1;
+    display: flex;     /* Jeśli chcesz karty jedna pod drugą: flex-direction: column */
+    flex-direction: column;
+    gap: 1rem;         /* Odstęp między kartami zamiast margin-bottom */
+}
+
+.book-card {
+    /* Resztę załatwia klasa .retro-box w HTML */
+    display: flex;
+    flex-direction: column;
+}
+
+.card-top-accent {
+    height: 6px;
+    background: linear-gradient(90deg, var(--color-primary), darkred);
+    border-bottom: var(--border-standard);
+}
+
+.card-body { padding: 1.5rem; }
+
+.book-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    font-family: var(--font-sans);
+}
+
+.book-authors {
+    font-size: 1rem;
+    font-style: italic;
+    color: var(--color-text-muted);
+    margin-bottom: 1rem;
+}
+
+.book-meta {
+    font-size: 0.85rem;
+    color: #777;
+    border-top: 1px solid #eee; /* Tu może zostać delikatny border */
+    padding-top: 10px;
+    margin-top: auto;
+}
+
+.badge {
+    background-color: #eee;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    margin-right: 5px;
+}
+
+/* Przycisk statusu dostępności */
+.btn-availability {
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border: var(--border-standard);
+    font-weight: 700;
+    text-transform: uppercase;
+    cursor: default; /* To informacja, nie akcja (chyba że dodasz link do wypożyczenia) */
+}
+
+/* Styl dla dostępnej książki (subtelna zieleń/teal) */
+.btn-availability.available {
+    background-color: #e6fcf5;
+    color: #0ca678;
+    border-color: #0ca678;
+    cursor: pointer; /* Jeśli ma prowadzić do wypożyczenia */
+}
+
+.btn-availability.available:hover {
+    background-color: #0ca678;
+    color: white;
+    box-shadow: var(--shadow-hard);
+    transform: translate(-1px, -1px);
+}
+
+/* Styl dla niedostępnej (szary/przekreślony) */
+.btn-availability.unavailable {
+    background-color: #f1f3f5;
+    color: #adb5bd;
+    border-color: #dee2e6;
+    border-style: dashed;
+    cursor: not-allowed;
+}
+

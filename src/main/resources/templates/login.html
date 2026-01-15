@@ -1,0 +1,36 @@
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .login-page-content})}">
+    <div class="login-page-content container">
+        <div class="retro-box" style="width: 600px; flex-shrink: 0;">
+            <div class="form-header">
+                Zaloguj się, śmiało.
+            </div>
+            <div class="form-content">
+                <form th:action="@{/login}" method="post" th:object="${loginForm}">
+
+                    <div class="form-label-field-group">
+                        <label for="username" class="form-label">Nazwa użytkownika</label>
+                        <input type="text" id="username" class="form-field" placeholder="cooltony1989" th:field="*{username}">
+                    </div>
+
+                    <div class="form-label-field">
+                        <label for="password" class="form-label">Hasło</label>
+                        <input type="password" id="password" class="form-field" placeholder="haslo123" th:field="*{password}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary retro-interactive-strong" style="margin-top: 1rem;">Zaloguj się!</button>
+
+                    <a th:href="@{/register}"
+                       class="btn retro-interactive-strong"
+                       style="margin-top: 1rem; color: white; background-color: sandybrown; text-decoration: none; display: inline-block; text-align: center; font-size: 0.9rem">
+                        Nie masz konta? Zarejestruj się!
+                    </a>
+
+                    <div style="text-align: center; margin-top: 10px;">
+                        <a th:href="@{/login}" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Wyczyść pola.</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>

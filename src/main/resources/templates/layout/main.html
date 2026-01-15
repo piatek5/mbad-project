@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:fragment="layout(title, content)">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${title}">Biblioteka MBAD</title>
+
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<nav th:fragment="top-menu" class="navbar">
+    <div class="logo">
+        <a th:href="@{/}">MBAD Library <span style="font-weight:300; opacity:0.7;">System</span></a>
+    </div>
+
+    <ul class="nav-links">
+        <li><a th:href="@{/}">Start</a></li>
+        <li>
+            <a th:href="@{/books}">Katalog</a>
+        </li>
+        <li sec:authorize="isAnonymous()">
+            <a th:href="@{/login}">Zaloguj się</a>
+        </li>
+        <li sec:authorize="isAuthenticated()">
+            <form th:action="@{/logout}" method="post" style="display: inline;">
+                <button type="submit" class="nav-btn-logout">Wyloguj</button>
+            </form>
+        </li>
+    </ul>
+</nav>
+
+<main class="main-content">
+    <div th:replace="${content}">
+        <p>Błąd ładowania treści...</p>
+    </div>
+</main>
+
+<footer class="site-footer">
+    <div class="container">
+        <p>&copy; 2026 <strong>MBAD Library</strong>. System zarządzania biblioteką.</p>
+    </div>
+</footer>
+
+</body>
+</html>

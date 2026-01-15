@@ -1,0 +1,111 @@
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .catalog-page-content})}">
+
+    <div class="catalog-page-content container">
+
+        <header style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+            <h1>Katalog Zbiorów</h1>
+            <p style="font-style: italic; color: var(--color-text-muted);">Przeglądaj dostępne pozycje w archiwum.</p>
+        </header>
+
+        <div class="books-and-filters">
+
+            <aside class="retro-box" style="width: 280px; flex-shrink: 0;">
+                <div class="form-header">
+                    Panel Wyszukiwania
+                </div>
+
+                <div class="form-content">
+                    <form th:action="@{/books}" method="get" th:object="${searchForm}">
+                        <div class="form-label-field">
+                            <label for="title" class="form-label">Tytuł / Fraza</label>
+                            <input type="text" id="title" class="form-field" placeholder="Wpisz tytuł..." th:field="*{title}">
+                        </div>
+                        <div class="form-label-field">
+                            <label for="author" class="form-label">Autor</label>
+                            <input type="text" id="author" class="form-field" placeholder="Np. Lem" th:field="*{author}">
+                        </div>
+                        <div class="form-label-field">
+                            <label for="isbn" class="form-label">ISBN</label>
+                            <input type="text" id="isbn" class="form-field" placeholder="Kod..." th:field="*{isbn}">
+                        </div>
+
+                        <div style="display: flex; gap: 10px; justify-content: space-between;">
+                            <div class="form-label-field" style="flex: 1;">
+                                <label for="minYear" class="form-label">Rok (od)</label>
+                                <input type="number" id="minYear" class="form-field" placeholder="1900" min="1900" max="2099" th:field="*{minYear}">
+                            </div>
+                            <div class="form-label-field" style="flex: 1;">
+                                <label for="maxYear" class="form-label">Rok (do)</label>
+                                <input type="number" id="maxYear" class="form-field" placeholder="2099" min="1900" max="2099" th:field="*{maxYear}">
+                            </div>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary retro-interactive-strong" style="margin-top: 1rem;">Zastosuj filtry</button>
+
+                        <div style="text-align: center; margin-top: 10px;">
+                            <a th:href="@{/books}" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Wyczyść kryteria</a>
+                        </div>
+                    </form>
+                </div>
+            </aside>
+
+            <div class="book-list">
+
+                <div th:if="${!isSearchMode}" class="retro-box"
+                     style="text-align: center; padding: 4rem 2rem; background-color: #fff; color: #777;">
+                    <h2 style="margin-bottom: 10px;">🧐 Rozpocznij wyszukiwanie</h2>
+                    <p>Wpisz parametry po lewej stronie, aby przeszukać katalog.</p>
+                </div>
+
+                <div th:if="${isSearchMode && books.isEmpty()}" class="retro-box"
+                     style="text-align: center; padding: 2rem; background-color: #ffe6e6; color: #c0392b;">
+                    <h3>Brak wyników</h3>
+                    <p>Niestety, nie znaleźliśmy książek dla podanych kryteriów.</p>
+                </div>
+
+                <th:block th:if="${!books.isEmpty()}">
+
+                    <div class="book-card retro-box retro-interactive" th:each="book : ${books}">
+
+                        <div class="card-top-accent"></div>
+
+                        <div class="card-body">
+                            <div class="book-title" th:text="${book.title}">Tytuł</div>
+
+                            <div class="book-authors">
+                                <span th:if="${!book.authors.isEmpty()}"
+                                      th:each="author, iterStat : ${book.authors}"
+                                      th:text="${author.firstName + ' ' + author.lastName} + ${!iterStat.last ? ', ' : ''}">
+                                </span>
+                                <span th:if="${book.authors.isEmpty()}" style="font-size: 0.8em; color: #aaa;">Autor nieznany</span>
+                            </div>
+
+                            <div class="book-meta">
+                                <div>Rok wydania: <strong th:text="${book.publicationYear}">2024</strong></div>
+                                <div style="margin-top: 5px;">
+                                    Wydawnictwo: <span th:text="${book.publisher?.name ?: 'Brak danych'}">Helion</span>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 15px;">
+                                <span class="badge" th:each="cat : ${book.categories}" th:text="${cat.name}">IT</span>
+                            </div>
+
+                            <button style="margin-top: 15px;" th:if="${book.availableCopiesCount > 0}"
+                                    class="btn-availability available retro-interactive">
+                                Dostępna: <span th:text="${book.availableCopiesCount}">3</span>
+                            </button>
+
+                            <button style="margin-top: 15px;" th:if="${book.availableCopiesCount == 0 || book.availableCopiesCount == null}"
+                                    class="btn-availability unavailable" disabled>
+                                Brak egzemplarzy
+                            </button>
+                        </div>
+                    </div>
+
+                </th:block>
+
+            </div>
+        </div>
+    </div>
+</th:block>

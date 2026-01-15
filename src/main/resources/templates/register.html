@@ -1,0 +1,40 @@
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .login-page-content})}">
+    <div class="login-page-content container">
+        <div class="retro-box" style="width: 600px; flex-shrink: 0;">
+            <div class="form-header">
+                Rejestracja konta.
+            </div>
+            <div class="form-content">
+                <form th:action="@{/register}" method="post" th:object="${registerForm}">
+
+                    <div class="form-label-field">
+                        <label for="username" class="form-label">Nazwa użytkownika</label>
+                        <input type="text" id="username" class="form-field" placeholder="cooltony1989" th:field="*{username}">
+                    </div>
+
+                    <div class="form-label-field">
+                        <label for="password" class="form-label">Hasło</label>
+                        <input type="password" id="password" class="form-field" placeholder="haslo123" th:field="*{password}">
+                    </div>
+
+                    <div class="form-label-field">
+                        <label for="email" class="form-label">Adres e-mail</label>
+                        <input type="email" id="email" class="form-field" placeholder="przyklad@domena.com" th:field="*{email}">
+                    </div>
+
+                    <div class="form-label-field">
+                        <label for="phone" class="form-label">Numer telefonu (opcjonalnie)</label>
+                        <input type="tel" id="phone" class="form-field" placeholder="" th:field="*{phone}">
+                    </div>
+
+                    <button type="submit" class="btn btn-primary retro-interactive-strong" style="margin-top: 1rem;">Zarejestruj się!</button>
+
+                    <div style="text-align: center; margin-top: 10px;">
+                        <a th:href="@{/register}" style="font-size: 0.8rem; text-decoration: underline; color: #666;">Wyczyść pola.</a>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</th:block>
