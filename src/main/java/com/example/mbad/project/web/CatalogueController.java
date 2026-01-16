@@ -48,9 +48,4 @@ public class CatalogueController {
 
         return "catalogue";
     }
-
-    @GetMapping("/")
-    public String welcome() {
-        return "index";
-    }
 }

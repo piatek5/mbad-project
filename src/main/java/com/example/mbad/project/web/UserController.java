@@ -56,4 +56,9 @@ public class UserController {
 
         return "user/profile";
     }
+
+    @GetMapping("/")
+    public String welcome() {
+        return "index";
+    }
 }

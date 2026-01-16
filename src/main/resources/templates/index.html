@@ -1,6 +1,13 @@
-<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .index-page-content})}">
+<th:block th:replace="~{layout/main :: layout('Katalog Książek', ~{:: .index-page-content})}"
+          xmlns:sec="http://www.w3.org/1999/xhtml">
     <div class="index-page-content container">
-        <header style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+        <header sec:authorize="isAuthenticated()" style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
+            <h1 style="text-align: center">Cześć, <span sec:authentication="name"></span>!</h1>
+            <h3 style="text-align: center">Witamy w elektronicznym portalu Biblioteki MBAD!</h3>
+            <p style="font-style: italic; color: var(--color-text-muted); text-align: center">Proszę zainteresować się paskiem na górze.</p>
+        </header>
+
+        <header sec:authorize="isAnonymous()" style="margin-bottom: 2rem; border-bottom: var(--border-standard); padding-bottom: 1rem;">
             <h1 style="text-align: center">Witamy w elektronicznym portalu Biblioteki MBAD!</h1>
             <p style="font-style: italic; color: var(--color-text-muted); text-align: center">Proszę zainteresować się paskiem na górze.</p>
         </header>

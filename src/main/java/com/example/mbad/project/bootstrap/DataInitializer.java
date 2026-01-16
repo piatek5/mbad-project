@@ -18,7 +18,6 @@ import java.util.stream.Collectors;
 public class DataInitializer implements CommandLineRunner {
 
     private final int RENEVAL_PERIOD = 30;
-    private final int RESERVATION_PERIOD = 30;
 
     private final PublisherRepository publisherRepository;
     private final AuthorRepository authorRepository;
@@ -48,7 +47,7 @@ public class DataInitializer implements CommandLineRunner {
         List<Publisher> publishers = initPublishers(10);
         List<Author> authors = initAuthors(20);
         List<Category> categories = initCategories(8);
-        List<User> users = initUsers(15);
+        List<User> users = initUsers(30);
 
         // 2. Encje zależne (Książki)
         List<Book> books = initBooks(30, publishers, authors, categories);
@@ -57,8 +56,8 @@ public class DataInitializer implements CommandLineRunner {
         List<BookCopy> copies = initBookCopies(books); // Tworzy po kilka kopii dla każdej książki
 
         // 4. Encje 'Obiegowe' (Circulation) - Wypożyczenia, Rezerwacje, Kolejki
-        initRentals(20, copies, users);
-        initReservations(10, copies, users);
+        initRentals(30, copies, users);
+        initReservations(12, copies, users);
         initQueueEntries(10, books, users);
 
         System.out.println("--- Zakończono generowanie danych ---");
@@ -113,7 +112,7 @@ public class DataInitializer implements CommandLineRunner {
             String firstName = faker.name().firstName();
             String lastName = faker.name().lastName();
             String username = (firstName + "." + lastName).toLowerCase() + faker.number().randomDigit();
-            String phone = faker.phoneNumber().phoneNumber();
+            String phone = faker.number().digits(9);
 
             users.add(User.builder()
                     .username(username)
@@ -129,7 +128,7 @@ public class DataInitializer implements CommandLineRunner {
             admin.setUsername("admin");
             admin.setPassword(passwordEncoder.encode("admin123")); // Hasło: admin123
             admin.setEmail("admin@biblioteka.pl");
-            admin.setRole(Role.ADMIN); // <--- TU JEST KLUCZ
+            admin.setRole(Role.ADMIN); // Rola dla adminka
 
             users.add(admin);
             System.out.println("--- STWORZONO KONTO ADMINA (Login: admin / Pass: admin123) ---");
@@ -162,7 +161,7 @@ public class DataInitializer implements CommandLineRunner {
 
         // Dla każdej książki stwórz od 1 do 4 egzemplarzy
         for (Book book : books) {
-            int copiesCount = faker.number().numberBetween(1, 4);
+            int copiesCount = faker.number().numberBetween(1, 5);
             for (int i = 0; i < copiesCount; i++) {
                 copies.add(BookCopy.builder()
                         .barcode(faker.number().digits(15))
