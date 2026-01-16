@@ -1,10 +1,8 @@
 package com.example.mbad.project.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
@@ -28,12 +26,14 @@ public class Author {
     @NotBlank
     private String lastName;
 
-    @NotBlank
-    private String birthYear;
+    @Positive
+    private Integer birthYear;
 
-    private String deathYear;
+    @Positive
+    private Integer deathYear;
 
     @ColumnDefault("'Nie wprowadzono opisu.'")
+    @Column(length = 2000)
     private String description;
 
     @ManyToMany(mappedBy = "authors")

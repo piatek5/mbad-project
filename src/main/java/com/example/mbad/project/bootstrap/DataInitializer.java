@@ -84,7 +84,7 @@ public class DataInitializer implements CommandLineRunner {
                     .firstName(faker.name().firstName())
                     .lastName(faker.name().lastName())
                     // W modelu Author birthYear to String
-                    .birthYear(String.valueOf(faker.number().numberBetween(1900, 2000)))
+                    .birthYear(faker.number().numberBetween(1800, 2000))
                     .description(faker.lorem().sentence())
                     .build());
         }
@@ -165,7 +165,7 @@ public class DataInitializer implements CommandLineRunner {
             int copiesCount = faker.number().numberBetween(1, 4);
             for (int i = 0; i < copiesCount; i++) {
                 copies.add(BookCopy.builder()
-                        .barcode(faker.number().randomNumber(12, true))
+                        .barcode(faker.number().digits(15))
                         .usable(true)
                         .available(true)
                         .book(book)

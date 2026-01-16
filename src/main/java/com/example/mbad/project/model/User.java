@@ -32,6 +32,7 @@ public class User {
     @NotBlank
     private String password;
 
+    @Column(length = 15)
     private String phone;
 
     @NotBlank

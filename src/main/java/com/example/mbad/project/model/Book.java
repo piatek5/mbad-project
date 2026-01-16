@@ -33,6 +33,7 @@ public class Book {
     private Integer publicationYear;
 
     @ColumnDefault("'Nie wprowadzono opisu.'")
+    @Column(length = 2000)
     private String description;
 
     @OneToMany(mappedBy = "book")

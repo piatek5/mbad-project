@@ -16,7 +16,8 @@ public class BookCopy {
     @GeneratedValue
     private Integer id;
 
-    private Long barcode;
+    @Column(unique = true, nullable = false)
+    private String barcode;
 
     @ColumnDefault("true")
     private Boolean usable;
