@@ -57,4 +57,9 @@ public class UserService implements UserDetailsService {
         return userRepository.searchUsers(form.getUsername(), form.getEmail(), form.getPhone());
     }
 
+    public User getUserById(long id) {
+        return  userRepository.findById(id)
+                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
 }

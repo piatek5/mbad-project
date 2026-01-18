@@ -21,7 +21,7 @@ import java.time.LocalDate;
 public class Reservation extends CirculationEntry
 {
     @ManyToOne
-    @JoinColumn(name = "book_id")
+    @JoinColumn(name = "book_copy_id")
     private BookCopy bookCopy;
 
     @NotNull

@@ -47,7 +47,9 @@
 
             <th:block th:if="${!books.isEmpty()}">
                 <div class="book-card retro-box retro-interactive" th:each="book : ${books}">
+
                     <div class="card-top-accent"></div>
+
                     <div class="card-body">
 
                         <div style="display: flex; justify-content: space-between;">
@@ -56,8 +58,13 @@
                         </div>
 
                         <div class="book-authors">
-                                <span th:each="author : ${book.authors}"
-                                      th:text="${author.firstName + ' ' + author.lastName} + ', '">Autor</span>
+                            <span th:each="author, iterStat : ${book.authors}">
+                                <a th:href="@{/admin/books(author=${author.lastName})}"
+                                   style="color: inherit; text-decoration: underline; cursor: pointer;">
+                                    <span th:text="${author.firstName + ' ' + author.lastName}"></span>
+                                </a>
+                                <span th:if="${!iterStat.last}">, </span>
+                            </span>
                         </div>
 
                         <div class="book-meta">

@@ -56,7 +56,7 @@ public class DataInitializer implements CommandLineRunner {
         List<BookCopy> copies = initBookCopies(books); // Tworzy po kilka kopii dla każdej książki
 
         // 4. Encje 'Obiegowe' (Circulation) - Wypożyczenia, Rezerwacje, Kolejki
-        initRentals(30, copies, users);
+        initRentals(40, copies, users);
         initReservations(12, copies, users);
         initQueueEntries(10, books, users);
 

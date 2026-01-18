@@ -1,6 +1,7 @@
 package com.example.mbad.project.web;
 
 import com.example.mbad.project.model.Book;
+import com.example.mbad.project.model.Rental;
 import com.example.mbad.project.model.User;
 import com.example.mbad.project.service.CatalogueService;
 import com.example.mbad.project.service.CirculationService;
@@ -97,5 +98,19 @@ public class AdminController {
     public String addBook(@ModelAttribute BookAddForm bookForm) {
         catalogueService.addNewBook(bookForm);
         return "redirect:/admin/books";
+    }
+
+    @GetMapping("/users/{id}/rentals")
+    public String userRentals(@PathVariable Long id, Model model) {
+        // Pobieramy usera (żeby wyświetlić jego imię w nagłówku)
+        User user = userService.getUserById(id);
+
+        // Pobieramy jego historię
+        List<Rental> rentals = circulationService.getUserHistory(id);
+
+        model.addAttribute("user", user);
+        model.addAttribute("rentals", rentals);
+
+        return "admin/user-rentals"; // Nowy widok
     }
 }

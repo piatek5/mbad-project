@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pl" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout/main :: layout('Historia Wypożyczeń', ~{:: .history-content})}">
+<body>
+<div class="history-content container">
+
+    <div class="retro-box" style="margin-bottom: 2rem; padding: 1.5rem; background: #fff;">
+        <h2 style="margin-top: 0;">👤 Historia: <span th:text="${user.username}">Janek</span></h2>
+        <p>Przegląd wszystkich operacji użytkownika.</p>
+        <a th:href="@{/admin/users}" class="btn" style="background: #eee;">⬅ Wróć do listy użytkowników</a>
+    </div>
+
+    <div class="retro-box" style="padding: 0; overflow: hidden;">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: var(--color-primary); color: white;">
+            <tr>
+                <th style="padding: 1rem; text-align: left;">Książka</th>
+                <th style="padding: 1rem;">Data wypożyczenia</th>
+                <th style="padding: 1rem;">Termin zwrotu</th>
+                <th style="padding: 1rem;">Data zwrotu</th>
+                <th style="padding: 1rem;">Status</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="rental : ${rentals}" style="border-bottom: 1px solid #eee;">
+                <td style="padding: 1rem;">
+                    <strong th:text="${rental.bookCopy.book.title}">Tytuł</strong>
+                    <div style="font-size: 0.8rem; color: #777;"
+                         th:text="'Kod: ' + ${rental.bookCopy.barcode}">Kod: 123</div>
+                </td>
+
+                <td style="padding: 1rem; text-align: center;"
+                    th:text="${rental.creationDate}">2024-01-01</td>
+
+                <td style="padding: 1rem; text-align: center;"
+                    th:text="${rental.dueDate}">2024-01-14</td>
+
+                <td style="padding: 1rem; text-align: center;">
+                    <span th:if="${rental.endDate != null}" th:text="${rental.endDate}">2024-01-10</span>
+                    <span th:if="${rental.endDate == null}">—</span>
+                </td>
+
+                <td style="padding: 1rem; text-align: center;">
+                        <span th:if="${rental.endDate != null}"
+                              class="badge" style="background: #d4edda; color: #155724;">Zwrócona</span>
+
+                    <span th:if="${rental.endDate == null && !rental.dueDate.isBefore(T(java.time.LocalDate).now())}"
+                          class="badge" style="background: #cce5ff; color: #004085;">Wypożyczona</span>
+
+                    <span th:if="${rental.endDate == null && rental.dueDate.isBefore(T(java.time.LocalDate).now())}"
+                          class="badge" style="background: #f8d7da; color: #721c24;">PRZETRZYMANA</span>
+                </td>
+            </tr>
+
+            <tr th:if="${rentals.isEmpty()}">
+                <td colspan="5" style="padding: 2rem; text-align: center; color: #777;">
+                    Ten użytkownik nie wypożyczył jeszcze żadnej książki.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
